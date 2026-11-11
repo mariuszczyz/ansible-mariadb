@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    mariadb_root_password: molecule-test-password
+  roles:
+    - role: mariuszczyz.mariadb.mariadb

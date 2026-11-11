@@ -1,0 +1,23 @@
+---
+namespace: mariuszczyz
+name: mariadb
+version: 2.0.0
+readme: README.md
+authors:
+  - Mariusz Czyz
+description: MariaDB server installation and configuration for EL9+ (Rocky Linux, AlmaLinux)
+license:
+  - BSD-3-Clause
+tags:
+  - database
+  - mariadb
+  - sql
+  - el9
+  - linux
+dependencies: {}
+build_ignore:
+  - .venv
+  - .molecule
+  - "*.tar.gz"
+  - .cache
+repository: https://github.com/mariuszczyz/centos-mysql

@@ -1,0 +1,91 @@
+---
+- name: Verify MariaDB
+  hosts: all
+  become: true
+  tasks:
+    - name: Check authenticated login succeeds
+      ansible.builtin.command:
+        cmd: mariadb --no-defaults -uroot -pmolecule-test-password -e "SELECT VERSION();"
+      register: mariadb_version
+      changed_when: false
+      check_mode: false
+      no_log: true
+
+    - name: Assert root login with password works
+      ansible.builtin.assert:
+        that:
+          - mariadb_version.rc == 0
+        fail_msg: "root login with password failed (rc={{ mariadb_version.rc }})"
+
+    - name: Attempt empty-password login
+      ansible.builtin.command:
+        cmd: mariadb --no-defaults -uroot -e "SELECT 1;"
+      register: mariadb_nopw
+      failed_when: false
+      changed_when: false
+      check_mode: false
+
+    - name: Assert empty-password login is rejected
+      ansible.builtin.assert:
+        that:
+          - mariadb_nopw.rc != 0
+        fail_msg: "root login without password was accepted"
+
+    - name: Check test database is absent
+      ansible.builtin.command:
+        cmd: mariadb --no-defaults -uroot -pmolecule-test-password -N -e "SHOW DATABASES LIKE 'test'"
+      register: mariadb_test_db
+      changed_when: false
+      check_mode: false
+      no_log: true
+
+    - name: Assert test database is absent
+      ansible.builtin.assert:
+        that:
+          - mariadb_test_db.stdout == ""
+        fail_msg: "test database is still present"
+
+    - name: Check anonymous users are removed
+      ansible.builtin.command:
+        cmd: "mariadb --no-defaults -uroot -pmolecule-test-password -N -e \"SELECT COUNT(*) FROM mysql.global_priv WHERE User=''\""
+      register: mariadb_anon
+      changed_when: false
+      check_mode: false
+      no_log: true
+
+    - name: Assert anonymous users are removed
+      ansible.builtin.assert:
+        that:
+          - mariadb_anon.stdout == "0"
+        fail_msg: "anonymous users are still present"
+
+    - name: Check remote root login is disallowed
+      ansible.builtin.command:
+        cmd: >-
+          mariadb --no-defaults -uroot -pmolecule-test-password -N -e
+          "SELECT COUNT(*) FROM mysql.global_priv WHERE User='root' AND
+          Host NOT IN ('localhost','127.0.0.1','::1')"
+      register: mariadb_remote_root
+      changed_when: false
+      check_mode: false
+      no_log: true
+
+    - name: Assert remote root login is disallowed
+      ansible.builtin.assert:
+        that:
+          - mariadb_remote_root.stdout == "0"
+        fail_msg: "remote root accounts are present"
+
+    - name: Check mariadb service is active
+      ansible.builtin.systemd_service:
+        name: "{{ mariadb_service_name | default('mariadb') }}"
+        state: started
+      register: mariadb_service
+      check_mode: true
+
+    - name: Assert mariadb service is active
+      ansible.builtin.assert:
+        that:
+          - mariadb_service.status.ActiveState == "active"
+          - not mariadb_service.changed
+        fail_msg: "mariadb service is not active"
