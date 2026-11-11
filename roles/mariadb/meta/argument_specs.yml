@@ -1,7 +1,7 @@
 ---
 argument_specs:
   main:
-    short_description: Install and configure MariaDB server on EL9+
+    short_description: Install and configure MariaDB server on EL9+ and Fedora 42+
     author:
       - Mariusz Czyz
     options:

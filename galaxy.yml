@@ -1,11 +1,11 @@
 ---
 namespace: mariuszczyz
 name: mariadb
-version: 2.0.0
+version: "2.1.0"
 readme: README.md
 authors:
   - Mariusz Czyz
-description: MariaDB server installation and configuration for EL9+ (Rocky Linux, AlmaLinux)
+description: MariaDB server installation and configuration for EL9+ and Fedora 42+
 license:
   - MIT
 tags:
@@ -14,6 +14,7 @@ tags:
   - sql
   - el9
   - linux
+  - fedora
 dependencies: {}
 build_ignore:
   - .venv

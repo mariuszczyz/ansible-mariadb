@@ -3,6 +3,17 @@
 All notable changes to the `mariuszczyz.mariadb` collection are documented
 here. This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.1.0]
+
+### Added
+
+- Fedora support (Fedora 42+; tested on Fedora 42 and 44). Fedora's
+  distribution-default MariaDB stream provides the unversioned
+  `mariadb-server`/`mariadb` package names, the `mariadb` service unit,
+  the `/etc/my.cnf.d/` layout, and the `/var/lib/mysql/mysql.sock`
+  socket, so no role code changes were required.
+- Molecule instances for Fedora 42 and 44 (podman).
+
 ## [2.0.0]
 
 ### Breaking changes

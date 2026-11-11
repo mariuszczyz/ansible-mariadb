@@ -6,8 +6,32 @@ dependency:
 driver:
   name: podman
 platforms:
-  - name: mariadb-instance
+  - name: rocky9-instance
     image: docker.io/geerlingguy/docker-rockylinux9-ansible:latest
+    pre_build_image: true
+    command: /usr/sbin/init
+    privileged: true
+    systemd: "true"
+    cgroup_manager: systemd
+    rootless: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    extra_opts:
+      - --cgroupns=host
+  - name: fedora42-instance
+    image: docker.io/geerlingguy/docker-fedora42-ansible:latest
+    pre_build_image: true
+    command: /usr/sbin/init
+    privileged: true
+    systemd: "true"
+    cgroup_manager: systemd
+    rootless: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    extra_opts:
+      - --cgroupns=host
+  - name: fedora44-instance
+    image: docker.io/geerlingguy/docker-fedora44-ansible:latest
     pre_build_image: true
     command: /usr/sbin/init
     privileged: true

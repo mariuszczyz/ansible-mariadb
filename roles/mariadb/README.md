@@ -1,6 +1,6 @@
 # mariuszczyz.mariadb.mariadb
 
-Installs and configures a MariaDB server on EL9+ (Rocky Linux, AlmaLinux):
+Installs and configures a MariaDB server on EL9+ (Rocky Linux, AlmaLinux) and Fedora 42+:
 installs the server packages, renders a low-memory configuration, starts the
 service, sets the root password, and runs the standard hardening steps
 (remove anonymous users, disallow remote root, drop the `test` database).

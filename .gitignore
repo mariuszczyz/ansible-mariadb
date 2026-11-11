@@ -1,5 +1,6 @@
 .venv/
 .molecule/
+.ansible/
 __pycache__/
 *.tar.gz
 *.retry

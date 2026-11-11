@@ -1,8 +1,8 @@
-# mariuszczyz.mariadb — MariaDB server for EL9+
+# mariuszczyz.mariadb — MariaDB server for EL9+ and Fedora
 
 MariaDB server installation and configuration for Enterprise Linux 9 and 10
-(Rocky Linux, AlmaLinux). The included configuration is tuned for low-resource
-servers with less than 2 GB of available memory.
+(Rocky Linux, AlmaLinux) and Fedora 42+. The included configuration is tuned
+for low-resource servers with less than 2 GB of available memory.
 
 This collection replaces the legacy `mariuszczyz.centos-mysql` role. It targets
 EL9+ (dnf, MariaDB 10.5/11.x), uses the `PyMySQL` connector and the
@@ -12,7 +12,8 @@ variable instead of a committed vars file.
 ## Requirements
 
 - ansible-core >= 2.16
-- Target hosts running EL9 or EL10 (Rocky Linux, AlmaLinux)
+- Target hosts running EL9/EL10 (Rocky Linux, AlmaLinux) or Fedora 42+
+  (tested: Fedora 42, 44)
 - Collection dependencies:
 
 ```bash
