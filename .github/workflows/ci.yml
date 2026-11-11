@@ -10,7 +10,7 @@ permissions:
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,6 +28,10 @@ jobs:
   molecule:
     name: Molecule
     runs-on: [self-hosted, linux]
+    # Self-hosted runners execute pull_request code with the runner's own
+    # privileges (SSH keys, LAN, sudo). Public-repo PRs are untrusted, so the
+    # self-hosted job runs only on trusted events, never on pull_request.
+    if: github.event_name != 'pull_request'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
