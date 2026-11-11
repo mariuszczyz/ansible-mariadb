@@ -20,4 +20,4 @@ build_ignore:
   - .molecule
   - "*.tar.gz"
   - .cache
-repository: https://github.com/mariuszczyz/centos-mysql
+repository: https://github.com/mariuszczyz/ansible-mariadb
