@@ -1,0 +1,45 @@
+---
+name: CI
+
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible-lint
+      - name: Install collection dependencies
+        run: ansible-galaxy collection install -r requirements.yml
+      - name: Run ansible-lint
+        run: ansible-lint
+
+  molecule:
+    name: Molecule
+    runs-on: [self-hosted, linux]
+    # Self-hosted runners execute pull_request code with the runner's own
+    # privileges (SSH keys, LAN, sudo). Public-repo PRs are untrusted, so the
+    # self-hosted job runs only on trusted events, never on pull_request.
+    if: github.event_name != 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install "molecule" "molecule-plugins[podman]"
+      - name: Run molecule test
+        run: molecule test -s default

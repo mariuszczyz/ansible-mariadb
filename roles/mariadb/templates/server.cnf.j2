@@ -1,0 +1,45 @@
+#
+# Managed by Ansible - mariuszczyz.mariadb
+# Do not edit on the target host; changes are overwritten.
+#
+
+# this is read by the standalone daemon and embedded servers
+[server]
+
+# this is only for the mysqld standalone daemon
+[mysqld]
+port                    = {{ mariadb_port }}
+innodb_file_per_table   = {{ mariadb_innodb_file_per_table | ternary('ON', 'OFF') }}
+performance_schema      = {{ mariadb_performance_schema | ternary('ON', 'OFF') }}
+key_buffer_size         = {{ mariadb_key_buffer_size }}
+max_allowed_packet      = {{ mariadb_max_allowed_packet }}
+table_open_cache        = {{ mariadb_table_open_cache }}
+sort_buffer_size        = {{ mariadb_sort_buffer_size }}
+read_buffer_size        = {{ mariadb_read_buffer_size }}
+read_rnd_buffer_size    = {{ mariadb_read_rnd_buffer_size }}
+net_buffer_length       = {{ mariadb_net_buffer_length }}
+thread_stack            = {{ mariadb_thread_stack }}
+server-id               = {{ mariadb_server_id }}
+wait_timeout            = {{ mariadb_wait_timeout }}
+thread_cache_size       = {{ mariadb_thread_cache_size }}
+bulk_insert_buffer_size = {{ mariadb_bulk_insert_buffer_size }}
+tmp_table_size          = {{ mariadb_tmp_table_size }}
+max_heap_table_size     = {{ mariadb_max_heap_table_size }}
+myisam_sort_buffer_size = {{ mariadb_myisam_sort_buffer_size }}
+skip-external-locking
+skip-name-resolve
+skip-host-cache
+
+# this is only for embedded server
+[embedded]
+
+# MariaDB-only options go here
+[mariadb]
+innodb_data_home_dir            = /var/lib/mysql
+innodb_data_file_path           = ibdata1:10M:autoextend
+innodb_log_group_home_dir       = /var/lib/mysql
+innodb_buffer_pool_size         = {{ mariadb_innodb_buffer_pool_size }}
+innodb_log_file_size            = {{ mariadb_innodb_log_file_size }}
+innodb_log_buffer_size          = {{ mariadb_innodb_log_buffer_size }}
+innodb_flush_log_at_trx_commit  = {{ mariadb_innodb_flush_log_at_trx_commit }}
+innodb_lock_wait_timeout        = {{ mariadb_innodb_lock_wait_timeout }}

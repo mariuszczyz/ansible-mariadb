@@ -1,0 +1,85 @@
+---
+# tasks file for mariuszczyz.mariadb
+
+- name: Assert mariadb_root_password is set
+  ansible.builtin.assert:
+    that:
+      - mariadb_root_password is defined
+      - mariadb_root_password | length > 0
+    fail_msg: "Set mariadb_root_password, e.g. in vaulted group_vars."
+
+- name: Install MariaDB packages
+  ansible.builtin.dnf:
+    name: "{{ mariadb_packages }}"
+    state: present
+
+- name: Deploy MariaDB server configuration
+  ansible.builtin.template:
+    src: server.cnf.j2
+    dest: "{{ mariadb_config_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart mariadb
+
+- name: Start and enable MariaDB
+  ansible.builtin.systemd_service:
+    name: "{{ mariadb_service_name }}"
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: Set MariaDB root password
+  ansible.mariadb.mariadb_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ mariadb_root_password }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
+    login_unix_socket: "{{ mariadb_socket }}"
+    check_implicit_admin: true
+  loop: "{{ mariadb_root_clients }}"
+  no_log: true
+
+- name: Deploy root client configuration
+  ansible.builtin.template:
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+    mode: "0600"
+  no_log: true
+
+- name: Remove anonymous users
+  ansible.mariadb.mariadb_query:
+    query: "DELETE FROM mysql.global_priv WHERE User=''"
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+  changed_when: false
+
+- name: Disallow root login remotely
+  ansible.mariadb.mariadb_query:
+    query: "DELETE FROM mysql.global_priv WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+  changed_when: false
+
+- name: Remove test database
+  ansible.mariadb.mariadb_db:
+    name:
+      - test
+    state: absent
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+
+- name: Remove test database grants
+  ansible.mariadb.mariadb_query:
+    query: 'DELETE FROM mysql.db WHERE Db=''test'' OR Db=''test\_%'''
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+  changed_when: false
+
+- name: Reload privilege tables
+  ansible.mariadb.mariadb_query:
+    query: FLUSH PRIVILEGES
+    login_user: root
+    login_unix_socket: "{{ mariadb_socket }}"
+  changed_when: false

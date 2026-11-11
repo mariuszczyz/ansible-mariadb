@@ -1,0 +1,131 @@
+---
+argument_specs:
+  main:
+    short_description: Install and configure MariaDB server on EL9+
+    author:
+      - Mariusz Czyz
+    options:
+      mariadb_root_password:
+        type: str
+        required: true
+        description: MariaDB root password. Supply via ansible-vault.
+      mariadb_packages:
+        type: list
+        elements: str
+        default:
+          - mariadb-server
+          - mariadb
+          - python3-PyMySQL
+        description: Packages to install on the managed host.
+      mariadb_service_name:
+        type: str
+        default: mariadb
+        description: Name of the MariaDB service unit.
+      mariadb_socket:
+        type: str
+        default: /var/lib/mysql/mysql.sock
+        description: Path to the MariaDB local socket.
+      mariadb_config_file:
+        type: str
+        default: /etc/my.cnf.d/server.cnf
+        description: Destination path of the rendered server configuration.
+      mariadb_root_clients:
+        type: list
+        elements: str
+        default:
+          - localhost
+          - 127.0.0.1
+          - ::1
+        description: Hosts for which the root account is provisioned.
+      mariadb_port:
+        type: int
+        default: 3306
+        description: TCP port the server listens on.
+      mariadb_innodb_file_per_table:
+        type: bool
+        default: true
+        description: Store each InnoDB table in its own tablespace file.
+      mariadb_performance_schema:
+        type: bool
+        default: false
+        description: Enable the performance schema.
+      mariadb_key_buffer_size:
+        type: str
+        default: 4M
+        description: MyISAM key buffer size.
+      mariadb_max_allowed_packet:
+        type: str
+        default: 1M
+        description: Maximum size of one packet or generated/intermediate string.
+      mariadb_table_open_cache:
+        type: str
+        default: 16
+        description: Number of open tables for all threads.
+      mariadb_sort_buffer_size:
+        type: str
+        default: 64K
+        description: Buffer for sorting rows.
+      mariadb_read_buffer_size:
+        type: str
+        default: 256K
+        description: Buffer for full-table scans.
+      mariadb_read_rnd_buffer_size:
+        type: str
+        default: 256K
+        description: Buffer for sorted-read row retrieval.
+      mariadb_net_buffer_length:
+        type: str
+        default: 2K
+        description: Initial buffer size for TCP/IP and socket communication.
+      mariadb_thread_stack:
+        type: str
+        default: 256K
+        description: Stack size per thread.
+      mariadb_server_id:
+        type: int
+        default: 1
+        description: Unique server id for replication.
+      mariadb_wait_timeout:
+        type: int
+        default: 120
+        description: Seconds to wait before closing a noninteractive connection.
+      mariadb_thread_cache_size:
+        type: str
+        default: 64
+        description: Number of threads cached for reuse.
+      mariadb_bulk_insert_buffer_size:
+        type: str
+        default: 4M
+        description: Buffer for bulk inserts into MyISAM tables.
+      mariadb_tmp_table_size:
+        type: str
+        default: 4M
+        description: Maximum size of in-memory internal temporary tables.
+      mariadb_max_heap_table_size:
+        type: str
+        default: 4M
+        description: Maximum size of user-created MEMORY tables.
+      mariadb_myisam_sort_buffer_size:
+        type: str
+        default: 2M
+        description: Buffer for MyISAM index rebuilds.
+      mariadb_innodb_buffer_pool_size:
+        type: str
+        default: 128M
+        description: Size of the InnoDB buffer pool.
+      mariadb_innodb_log_file_size:
+        type: str
+        default: 16M
+        description: Size of each InnoDB redo log file.
+      mariadb_innodb_log_buffer_size:
+        type: str
+        default: 24M
+        description: Size of the InnoDB log buffer.
+      mariadb_innodb_flush_log_at_trx_commit:
+        type: int
+        default: 1
+        description: InnoDB redo log flush policy at transaction commit.
+      mariadb_innodb_lock_wait_timeout:
+        type: int
+        default: 50
+        description: Seconds an InnoDB transaction waits for a row lock.

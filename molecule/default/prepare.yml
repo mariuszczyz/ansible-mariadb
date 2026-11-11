@@ -1,0 +1,17 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  tasks:
+    # In a systemd-in-container test instance, systemd (PID 1) needs a few
+    # seconds to finish booting after the container is created. Poll its
+    # control bus before the converge run manages services, so converge does
+    # not race a half-started systemd. There is no systemd-module equivalent
+    # that retries on the bus being temporarily down, hence the command.
+    - name: Wait for the systemd control bus to be ready  # noqa: command-instead-of-module
+      ansible.builtin.command: systemctl daemon-reload
+      changed_when: false
+      register: systemd_ready
+      retries: 30
+      delay: 2
+      until: systemd_ready.rc == 0
