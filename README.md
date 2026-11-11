@@ -83,7 +83,7 @@ Run the playbook with `--ask-vault-pass` (or a vault password file).
 
 ## License
 
-BSD-3-Clause
+MIT
 
 ## Author Information
 

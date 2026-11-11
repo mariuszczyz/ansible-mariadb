@@ -7,7 +7,7 @@ authors:
   - Mariusz Czyz
 description: MariaDB server installation and configuration for EL9+ (Rocky Linux, AlmaLinux)
 license:
-  - BSD-3-Clause
+  - MIT
 tags:
   - database
   - mariadb
