@@ -9,6 +9,14 @@ EL9+ (dnf, MariaDB 10.5/11.x), uses the `PyMySQL` connector and the
 `ansible.mariadb` modules, and takes the root password as a required role
 variable instead of a committed vars file.
 
+## Supported platforms
+
+| Platform | Supported versions | Distribution MariaDB | Molecule tested |
+| --- | --- | --- | --- |
+| Rocky Linux | 9, 10 | 10.5 (EL9), 10.11 (EL10) | 9 |
+| AlmaLinux | 9, 10 | 10.5 (EL9), 10.11 (EL10) | — |
+| Fedora | 42+ | 10.11 (42, 43), 11.8 (44), 12.3 (45) | 42, 44 |
+
 ## Requirements
 
 - ansible-core >= 2.16
